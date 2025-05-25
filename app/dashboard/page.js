@@ -129,39 +129,39 @@ export default function Dashboard() {
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">
+        <div className="text-center mb-12">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <h1 className="text-4xl sm:text-5xl font-bold gradient-text">
               🚀 Coding Interview Roadmap
             </h1>
             <div className="flex items-center gap-4">
-              <span className="text-white text-sm sm:text-base">
+              <span className="text-white/90 text-sm sm:text-base">
                 Welcome, {user?.email?.split('@')[0]}!
               </span>
               <button
                 onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+                className="btn-secondary"
               >
                 Logout
               </button>
             </div>
           </div>
-          <p className="text-white/90 text-lg">Track your progress through coding interview preparation</p>
+          <p className="text-white/70 text-lg">Track your progress through coding interview preparation</p>
         </div>
 
         {/* Stats */}
-        <div className="flex justify-center gap-4 sm:gap-6 mb-8 flex-wrap">
-          <div className="bg-white/20 backdrop-blur-lg rounded-xl p-4 sm:p-6 text-center text-white border border-white/20">
-            <div className="text-2xl sm:text-3xl font-bold">{stats.totalProblems}</div>
-            <div className="text-white/80 text-sm">Total Problems</div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+          <div className="card">
+            <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">{stats.totalProblems}</div>
+            <div className="text-white/70">Total Problems</div>
           </div>
-          <div className="bg-white/20 backdrop-blur-lg rounded-xl p-4 sm:p-6 text-center text-white border border-white/20">
-            <div className="text-2xl sm:text-3xl font-bold">{stats.completedProblems}</div>
-            <div className="text-white/80 text-sm">Completed</div>
+          <div className="card">
+            <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">{stats.completedProblems}</div>
+            <div className="text-white/70">Completed</div>
           </div>
-          <div className="bg-white/20 backdrop-blur-lg rounded-xl p-4 sm:p-6 text-center text-white border border-white/20">
-            <div className="text-2xl sm:text-3xl font-bold">{stats.progressPercent}%</div>
-            <div className="text-white/80 text-sm">Progress</div>
+          <div className="card">
+            <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">{stats.progressPercent}%</div>
+            <div className="text-white/70">Progress</div>
           </div>
         </div>
 
@@ -169,53 +169,55 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {roadmapData.map((topic, topicIndex) => (
             <div key={topicIndex} className="card">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">{topic.title}</h3>
-                <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-semibold text-white">{topic.title}</h3>
+                <span className="glass-effect px-3 py-1 rounded-full text-sm font-medium">
                   {topic.problems.length} problems
                 </span>
               </div>
 
               <ul className="space-y-3">
                 {topic.problems.map((problem, problemIndex) => (
-                  <li key={problemIndex} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                    <input
-                      type="checkbox"
-                      checked={progress[problem.id] || false}
-                      onChange={(e) => handleProgressChange(problem.id, e.target.checked)}
-                      className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <a
-                      href={`https://leetcode.com/problems/${problem.url}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex-1 text-sm hover:text-blue-600 transition-colors ${
-                        progress[problem.id] ? 'line-through opacity-60' : ''
-                      }`}
-                    >
-                      {problem.name}
-                    </a>
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                      problem.difficulty === 'easy' 
-                        ? 'bg-green-100 text-green-800'
-                        : problem.difficulty === 'medium'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {problem.difficulty.toUpperCase()}
-                    </span>
+                  <li key={problemIndex} className="glass-effect p-3 rounded-lg transition-all duration-300 hover:bg-white/15">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={progress[problem.id] || false}
+                        onChange={(e) => handleProgressChange(problem.id, e.target.checked)}
+                        className="w-4 h-4 text-primary-500 focus:ring-primary-500 border-white/20 rounded"
+                      />
+                      <a
+                        href={`https://leetcode.com/problems/${problem.url}/`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex-1 text-sm hover:text-primary-400 transition-colors ${
+                          progress[problem.id] ? 'line-through opacity-60' : ''
+                        }`}
+                      >
+                        {problem.name}
+                      </a>
+                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                        problem.difficulty === 'easy' 
+                          ? 'bg-green-500/20 text-green-400'
+                          : problem.difficulty === 'medium'
+                          ? 'bg-yellow-500/20 text-yellow-400'
+                          : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {problem.difficulty.toUpperCase()}
+                      </span>
+                    </div>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-4">
-                <div className="bg-gray-200 rounded-full h-2">
+              <div className="mt-6">
+                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                   <div
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300"
+                    className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 transition-all duration-300"
                     style={{ width: `${calculateTopicProgress(topic)}%` }}
                   ></div>
                 </div>
-                <div className="text-sm text-gray-600 mt-1 text-center">
+                <div className="text-sm text-white/60 mt-2 text-center">
                   {Math.round(calculateTopicProgress(topic))}% Complete
                 </div>
               </div>
