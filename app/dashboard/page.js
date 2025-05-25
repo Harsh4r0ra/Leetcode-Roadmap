@@ -9,6 +9,8 @@ export default function Dashboard() {
   const [user, setUser] = useState(null)
   const [progress, setProgress] = useState({})
   const [loading, setLoading] = useState(true)
+  const [logoutLoading, setLogoutLoading] = useState(false)
+  const [logoutError, setLogoutError] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -95,10 +97,16 @@ export default function Dashboard() {
   }
 
   const handleLogout = async () => {
+    setLogoutLoading(true)
+    setLogoutError('')
     try {
       await supabase.auth.signOut()
     } catch (error) {
+      setLogoutError('Error signing out. Please try again.')
       console.error('Error signing out:', error)
+    } finally {
+      setLogoutLoading(false)
+      router.push('/login')
     }
   }
 
@@ -140,26 +148,30 @@ export default function Dashboard() {
               </span>
               <button
                 onClick={handleLogout}
-                className="btn-secondary"
+                className="btn-secondary disabled:opacity-60"
+                disabled={logoutLoading}
               >
-                Logout
+                {logoutLoading ? 'Logging out...' : 'Logout'}
               </button>
             </div>
           </div>
           <p className="text-white/70 text-lg">Track your progress through coding interview preparation</p>
+          {logoutError && (
+            <div className="mt-2 text-red-400 text-sm">{logoutError}</div>
+          )}
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-          <div className="card">
+          <div className="card bg-white dark:bg-gray-800">
             <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">{stats.totalProblems}</div>
             <div className="text-white/70">Total Problems</div>
           </div>
-          <div className="card">
+          <div className="card bg-white dark:bg-gray-800">
             <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">{stats.completedProblems}</div>
             <div className="text-white/70">Completed</div>
           </div>
-          <div className="card">
+          <div className="card bg-white dark:bg-gray-800">
             <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">{stats.progressPercent}%</div>
             <div className="text-white/70">Progress</div>
           </div>
@@ -168,9 +180,9 @@ export default function Dashboard() {
         {/* Roadmap Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {roadmapData.map((topic, topicIndex) => (
-            <div key={topicIndex} className="card">
+            <div key={topicIndex} className="card bg-white dark:bg-gray-800">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-white">{topic.title}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{topic.title}</h3>
                 <span className="glass-effect px-3 py-1 rounded-full text-sm font-medium">
                   {topic.problems.length} problems
                 </span>
